@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Web as Rube Boldgerb machine</title>
+    <style>
+        html * {
+          /* font-size: 16px;
+          line-height: 1.625;
+          color: #2020131; */
+          font-family: Garamond;
+          font-style: italic;
+        }
+      </style>
+
+</head>
+<body>
+    <button role="button" id="initTrigger">lets go &#128140</button>
+    <section id="cocktailSection"></section>
+    <section id="mealSection"></section>
+    <section id="jokeSection"></section>
+    <section id="poemSection"></section>
+    <section id="genreSection"></section>
+    <section id="adviceSection"></section>
+    <section id="stoicSection"></section>
+    <section id="nasaImage"></section>
+
+
+    <script>
+        let triggerButton = document.getElementById('initTrigger')
+        let cocktailSection = document.getElementById('cocktailSection')
+        let mealSection = document.getElementById('mealSection')
+        let jokeSection = document.getElementById('jokeSection')
+        let poemSection = document.getElementById('poemSection')
+        let genreSection = document.getElementById('poemSection')
+        let adviceSection = document.getElementById('adviceSection')
+        let stoicSection = document.getElementById('stoicSection')
+        let NASAsection = document.getElementById("nasaImage")
+        
+        const randomCocktailURL = "https://www.thecocktaildb.com/api/json/v1/1/random.php"
+
+        const randomMealURL = "https://www.themealdb.com/api/json/v1/1/random.php"
+
+        const chuckJokeURL = "https://api.chucknorris.io/jokes/random"
+
+        const poemURL = "https://poetrydb.org/random"
+
+        const genreURL = "https://binaryjazz.us/wp-json/genrenator/v1/genre/"
+
+        const adviceURL = "https://api.adviceslip.com/advice"
+
+        const stoicURL = "https://api.kanye.rest/"
+
+        const nasaAPODurl = "https://api.nasa.gov/planetary/apod"
+        const nasaAPIurl = "api_key=5YqvqUyLyxvWo8jM4B2fktyW9R9db9wogYbnH3K2"
+
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+        today = yyyy + '-' + mm + '-' + dd;
+        //document.write(today);
+        const nasaDate = 'date='+today
+
+
+
+        //console.log(triggerButton)
+        const fetchCocktailData = () => {
+            //console.log('fetchinggg')
+
+            fetch(randomCocktailURL)
+                .then((payload) => payload.json() )
+                .then((data) => appendCocktailData(data))
+
+        }
+
+        const appendCocktailData = (data) => {
+            //console.log(data)
+
+            const firstDrink = data.drinks[0]
+            const drinkName = firstDrink.strDrink
+            const drinkImg = firstDrink.strDrinkThumb
+
+            console.log(drinkImg)
+
+            const nameHeader = document.createElement('h3')
+            nameHeader.innerText = "For our first date we had a " + drinkName + " to drink"
+            cocktailSection.appendChild(nameHeader)
+
+            const image = document.createElement('img')
+            image.src = drinkImg 
+            image.width = "200"
+
+            image.alt = "image of " + drinkName
+            cocktailSection.appendChild(image)
+
+
+            fetchMealData()
+
+        }
+        
+        const fetchMealData = () => {
+            //console.log('fetchinggg')
+
+            fetch(randomMealURL)
+                .then((payload) => payload.json() )
+                .then((data) => appendMealData(data))
+
+        }
+
+        const appendMealData = (data) => {
+            //console.log(data)
+
+            const firstMeal = data.meals[0]
+            const mealName = firstMeal.strMeal
+            const mealImg = firstMeal.strMealThumb
+
+            console.log(mealImg)
+
+            const mealHeader = document.createElement('h3')
+            mealHeader.innerText = "and " + mealName + " to go with it"
+            mealHeader.align = "right"
+            mealSection.appendChild(mealHeader)
+
+            const image = document.createElement('img')
+            image.src = mealImg
+            image.width = "200"
+            image.align = "right"
+            image.alt = "image of " + mealName
+            mealSection.appendChild(image)
+
+
+            fetchJokeData()
+
+        }
+
+        const fetchJokeData = () => {
+            //console.log('fetchinggg')
+
+            fetch(chuckJokeURL)
+                .then((payload) => payload.json() )
+                .then((data) => appendJokeData(data))
+
+        }
+
+        const appendJokeData = (data) => {
+            //console.log(data)
+
+            const joke = data.value
+
+            const jokeHeader = document.createElement('h3')
+            jokeHeader.innerText = "\n\n\n\n\n\n\n\n" +  "and then you told this bad joke."
+            const jokeBody = document.createElement('h5')
+            jokeBody.innerText = joke
+            const jokeFooter = document.createElement('h3')
+            jokeFooter.innerText = "And I tried so hard to not get up and leave"
+            jokeSection.appendChild(jokeHeader)
+            jokeSection.appendChild(jokeBody)
+            jokeSection.appendChild(jokeFooter)
+
+
+
+            fetchPoemData()
+
+        }
+
+        const fetchPoemData = () => {
+            //console.log('fetchinggg')
+
+            fetch(poemURL)
+                .then((payload) => payload.json() )
+                .then((data) => appendPoemData(data))
+
+        }
+
+        const appendPoemData = (data) => {
+            console.log(data)
+
+            const poem = data[0]
+            const poemText = poem.lines
+            const poemAuthor = poem.author
+
+
+            const poemHeader = document.createElement('h3')
+            poemHeader.innerText = "\n\n\n\n\n" + "I tried to recite this poem by " + poemAuthor + " to change the subject, "
+            const poemBody = document.createElement('h6')
+            poemBody.innerText = poemText
+            const poemFooter = document.createElement('h3')
+            poemFooter.innerText = "And you definitely weren't impressed"
+            poemSection.appendChild(poemHeader)
+            poemSection.appendChild(poemBody)
+            poemSection.appendChild(poemFooter)
+
+
+
+            fetchgenreData()
+
+        }
+
+        const fetchgenreData = () => {
+            //console.log('fetchinggg')
+
+            fetch(genreURL)
+                .then((payload) => payload.json() )
+                .then((data) => appendgenreData(data))
+
+        }
+
+        const appendgenreData = (data) => {
+            console.log(data)
+
+            const genre = data
+
+            const genreHeader = document.createElement('h3')
+            genreHeader.innerText = "\n\n\n\n\n" + "Then you asked me what my favorite genre of music was and I replied "
+            genreHeader.align = "right"
+            const genreBody = document.createElement('h5')
+            genreBody.innerText = genre
+            genreBody.align = "right"
+            const genreFooter = document.createElement('h3')
+            genreFooter.innerText = "And I watched you hold back a laugh."
+            genreFooter.align = "right"
+            genreSection.appendChild(genreHeader)
+            genreSection.appendChild(genreBody)
+            genreSection.appendChild(genreFooter)
+
+
+
+            fetchadviceData()
+
+
+        }
+
+        const fetchadviceData = () => {
+            //console.log('fetchinggg')
+
+            fetch(adviceURL)
+                .then((payload) => payload.json() )
+                .then((data) => appendadviceData(data))
+
+        }
+
+        const appendadviceData = (data) => {
+            console.log(data)
+
+            const advice = data.slip
+            const adviceText = advice.advice
+
+            const adviceHeader = document.createElement('h3')
+            adviceHeader.innerText = "\n\n\n\n\n" + "Why you decided to offer this helpful little snippet at this point "
+            const adviceBody = document.createElement('h5')
+            adviceBody.innerText = adviceText
+            const adviceFooter = document.createElement('h3')
+            adviceFooter.innerText = "I will never understand"
+            adviceSection.appendChild(adviceHeader)
+            adviceSection.appendChild(adviceBody)
+            adviceSection.appendChild(adviceFooter)
+
+
+
+            fetchstoicData()
+
+
+        }
+
+        const fetchstoicData = () => {
+            //console.log('fetchinggg')
+
+            fetch(stoicURL)
+                .then((payload) => payload.json() )
+                .then((data) => appendstoicData(data))
+
+        }
+
+        const appendstoicData = (data) => {
+            console.log(data)
+
+            const stoic = data.quote
+
+            const stoicHeader = document.createElement('h3')
+            stoicHeader.innerText = "\n\n\n\n\n" + "So I volleyed back a Kanye moment "
+            stoicHeader.align = "right"
+            const stoicBody = document.createElement('h5')
+            stoicBody.innerText = stoic
+            stoicBody.align = "right"
+            const stoicFooter = document.createElement('h3')
+            stoicFooter.innerText = "To see how far I could test your patience"
+            stoicFooter.align = "right"
+            stoicSection.appendChild(stoicHeader)
+            stoicSection.appendChild(stoicBody)
+            stoicSection.appendChild(stoicFooter)
+
+
+
+            fetchNASAData()
+
+
+        }
+
+
+        const fetchNASAData = () => {
+            const fetchURL = nasaAPODurl+"?"+nasaAPIurl+"&"+nasaDate
+            fetch(fetchURL)
+                .then((payload) => payload.json() )
+                .then((data) => appendNASAData(data))
+
+        }
+
+        const appendNASAData = (data) => {
+            console.log(data)
+
+            const APODname = data.title
+            const APODImg = data.url
+
+            const apodHeader = document.createElement('h3')
+            apodHeader.innerText = "\n\n\n" + "As the night bounced clumsily back and forth \n it felt better knowing how insignificant we were \n sitting under " + APODname + " tonight"
+            NASAsection.appendChild(apodHeader)
+
+
+
+            const image = document.createElement('img')
+            image.src = APODImg
+            image.alt = "image of " + APODname
+            image.width = "200"
+            NASAsection.appendChild(image)
+
+            //fetchEmojiData()
+
+        }
+
+
+        triggerButton.addEventListener("click", fetchCocktailData)
+    </script>
+</body>
+</html>
